@@ -7,7 +7,7 @@ function generatePassword() {
 
   // object containing default criteria for password,
   // functions for each character type to get random of type
-  let passcrit = {
+  let elements = {
     // array containing symbols to:
     // - show available symbols on alert
     // - choose random symbols from
@@ -84,6 +84,8 @@ function generatePassword() {
     numb: true,
     upperlet: true,
     lowerlet: true,
+    // this is where result will be stored
+    password: '',
 
     // random number generator
     // Math.floor(Math.random() * (max - min + 1)) + min
@@ -95,7 +97,7 @@ function generatePassword() {
     },
     // random number
     rnum: function () {
-      return Math.floor(Math.random()* 11);
+      return Math.floor(Math.random() * 11);
     },
     // random upper case letter
     rupp: function () {
@@ -108,50 +110,74 @@ function generatePassword() {
   };
 
   // get desired character length from user
-  passcrit.charnum = prompt("Password length: ");
+  elements.charnum = prompt("Password length: ");
   // change variable from string to number
-  passcrit.charnum = parseInt(passcrit.charnum);
+  elements.charnum = parseInt(elements.charnum);
   // if length does not meet requirement, end function
-  if (typeof passcrit.charnum === 'string' || passcrit.charnum < 8 || passcrit.charnum > 128) {
+  if (typeof elements.charnum != 'number' || elements.charnum < 8 || elements.charnum > 128) {
     alert('Error: must enter a number from 8 to 128');
     return;
   }
 
   // string variable to display symbols on alert
   let symbols = '';
-  for (let i = 0; i < passcrit.symlib.length; i++) {
-    symbols += passcrit.symlib[i];
+  for (let i = 0; i < elements.symlib.length; i++) {
+    symbols += elements.symlib[i];
   }
 
   // include symbols?
-  passcrit.symb = confirm('Include symbols?\n' + symbols);
+  elements.symb = confirm('Include symbols?\n' + symbols);
   // include numbers?
-  passcrit.numb = confirm("Include numbers?");
+  elements.numb = confirm("Include numbers?");
   // include uppercase letters?
-  passcrit.upperlet = confirm('Include upper case letters?');
+  elements.upperlet = confirm('Include upper case letters?');
   // include lowercase letters?
-  passcrit.lowerlet = confirm('Include lower case letters?');
+  elements.lowerlet = confirm('Include lower case letters?');
 
   // break out of function if no characters selected
-  if (passcrit.symb === false && passcrit.numb === false && passcrit.upperlet === false && passcrit.lowerlet === false) {
+  if (elements.symb === false && elements.numb === false && elements.upperlet === false && elements.lowerlet === false) {
     alert('Error: no characters selected');
     return;
   }
-  console.log(passcrit.rsym());
-  console.log(passcrit.rnum());
-  console.log(passcrit.rupp());
-  console.log(passcrit.rlow());
-  // string variable that will hold password result
-  let passtring = '';
-  // for loop using passcrit.charnum to loop through each character position
-  for (let j = 0; j < passcrit.charnum; j++) {
-    // variable to hold randomly generated character
-    let randchar = '';
-  // 1. randomly choose between selected character types
-  // 2. run random function for character type
-  // 3. add character to end of string variable
-    passtring += randchar;
+
+  
+  let selectors = [];
+  // if character choice is true, put into array
+  if (elements.symb === true) {
+    selectors.push('symbols');
   }
+  if (elements.numb === true) {
+    selectors.push('numbers');
+  }
+  if (elements.upperlet === true) {
+    selectors.push('upper');
+  }
+  if (elements.lowerlet === true) {
+    selectors.push('lower');
+  }
+
+  // for loop using elements.charnum to loop through each character position
+  for (let j = 0; j < elements.charnum; j++) {
+    // 1. randomly choose between selected character types
+    // use selectors array length to generate random number
+    let index = Math.floor(Math.random() * selectors.length);
+    // pick element at that index, use if statements to run appropriate random function
+    // ex: if array[i] is symb, run rsym
+    
+    // 2. run random function for character type
+    // 3. add character to end of string variable
+    if (selectors[index] === 'symbols') {
+      elements.password += elements.rsym();
+    } else if (selectors[index] === 'numbers') {
+      elements.password += elements.rnum();
+    } else if (selectors[index] === 'upper') {
+      elements.password += elements.rupp();
+    } else if (selectors[index] === 'lower') {
+      elements.password += elements.rlow();
+    }
+  }
+  // return password and end function
+  return elements.password;
 }
 
 // Write password to the #password input
