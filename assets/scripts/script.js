@@ -138,10 +138,19 @@ function generatePassword() {
   // include lowercase letters?
   elements.lowerlet = confirm('Include lower case letters?');
 
-  // break out of function if no characters selected
+  // if no character types selected, loop through choices until at least one chosen
   if (elements.symb === false && elements.numb === false && elements.upperlet === false && elements.lowerlet === false) {
-    alert('Error: no characters selected');
-    return;
+    do {
+      alert('Error: no characters selected, please select at least one character type');
+      // include symbols?
+      elements.symb = confirm('Include symbols?\n' + symbols);
+      // include numbers?
+      elements.numb = confirm("Include numbers?");
+      // include uppercase letters?
+      elements.upperlet = confirm('Include upper case letters?');
+      // include lowercase letters?
+      elements.lowerlet = confirm('Include lower case letters?');
+    } while (elements.symb === false && elements.numb === false && elements.upperlet === false && elements.lowerlet === false);
   }
 
   let selectors = [];
