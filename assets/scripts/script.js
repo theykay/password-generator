@@ -112,11 +112,15 @@ function generatePassword() {
   // get desired character length from user
   elements.charnum = prompt("Password length: ");
   // change variable from string to number
-  elements.charnum = parseInt(elements.charnum);
   // if length does not meet requirement, end function
-  if (typeof elements.charnum != 'number' || elements.charnum < 8 || elements.charnum > 128) {
-    alert('Error: must enter a number from 8 to 128');
-    return;
+
+  if (isNaN(parseInt(elements.charnum)) || parseInt(elements.charnum) < 8 || parseInt(elements.charnum) > 128 || elements.charnum === null) {
+    do {
+      alert('Error: must enter a number from 8 to 128');
+      elements.charnum = prompt('Password length: ');
+    } while (isNaN(parseInt(elements.charnum)) || parseInt(elements.charnum) < 8 || parseInt(elements.charnum) > 128 || elements.charnum === null);
+  } else {
+    elements.charnum = parseInt(elements.charnum);
   }
 
   // string variable to display symbols on alert
@@ -140,7 +144,6 @@ function generatePassword() {
     return;
   }
 
-  
   let selectors = [];
   // if character choice is true, put into array
   if (elements.symb === true) {
@@ -163,7 +166,7 @@ function generatePassword() {
     let index = Math.floor(Math.random() * selectors.length);
     // pick element at that index, use if statements to run appropriate random function
     // ex: if array[i] is symb, run rsym
-    
+
     // 2. run random function for character type
     // 3. add character to end of string variable
     if (selectors[index] === 'symbols') {
