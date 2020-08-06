@@ -154,39 +154,78 @@ function generatePassword() {
   }
 
   let selectors = [];
-  // if character choice is true, put into array
+  let selectorsAll = [];
+  // if character type choice is true, put into arrays
   if (elements.symb === true) {
     selectors.push('symbols');
+    selectorsAll.push('symbols');
   }
   if (elements.numb === true) {
     selectors.push('numbers');
+    selectorsAll.push('numbers');
   }
   if (elements.upperlet === true) {
     selectors.push('upper');
+    selectorsAll.push('upper');
   }
   if (elements.lowerlet === true) {
     selectors.push('lower');
+    selectorsAll.push('lower');
   }
 
   // for loop using elements.charnum to loop through each character position
   for (let j = 0; j < elements.charnum; j++) {
     // 1. randomly choose between selected character types
     // use selectors array length to generate random number
-    let index = Math.floor(Math.random() * selectors.length);
+    let index = Math.floor(Math.random() * selectorsAll.length);
     // pick element at that index, use if statements to run appropriate random function
-    // ex: if array[i] is symb, run rsym
+    // ex: if array[i] is symb, run rsym 
 
     // 2. run random function for character type
     // 3. add character to end of string variable
-    if (selectors[index] === 'symbols') {
-      elements.password += elements.rsym();
-    } else if (selectors[index] === 'numbers') {
-      elements.password += elements.rnum();
-    } else if (selectors[index] === 'upper') {
-      elements.password += elements.rupp();
-    } else if (selectors[index] === 'lower') {
-      elements.password += elements.rlow();
+    if (selectorsAll[index] === 'symbols') {
+      // if character type hasn't been picked yet
+      if (selectors.includes('symbols')) {
+        // get random character type
+        elements.password += elements.rsym();
+        // remove symbol from pool
+        selectors.splice(selectors.indexOf('symbols'), 1);
+      // else if all desired character types have already been used
+      } else if (selectors.length == 0) {
+        elements.password += elements.rsym();
+      } else {
+        // otherwise redo this character
+        j--;
+      }
+    } else if (selectorsAll[index] === 'numbers') {
+      if (selectors.includes('numbers')) {
+        elements.password += elements.rnum();
+        selectors.splice(selectors.indexOf('numbers'), 1);
+      } else if (selectors.length == 0) {
+        elements.password += elements.rnum();
+      } else {
+        j--;
+      }
+    } else if (selectorsAll[index] === 'upper') {
+      if (selectors.includes('upper')) {
+        elements.password += elements.rupp();
+        selectors.splice(selectors.indexOf('upper'), 1);
+      } else if (selectors.length == 0) {
+        elements.password += elements.rupp();
+      } else {
+        j--;
+      }  
+    } else if (selectorsAll[index] === 'lower') {
+      if (selectors.includes('lower')) {
+        elements.password += elements.rlow();
+        selectors.splice(selectors.indexOf('lower'), 1);
+      } else if (selectors.length == 0) {
+        elements.password += elements.rlow();
+      } else {
+        j--;
+      } 
     }
+    // the problem with this method is that for n character types, the first n characters are guaranteed to be different...rather than making sure that n different character types appear anywhere in password
   }
   // return password and end function
   return elements.password;
