@@ -1,10 +1,6 @@
 var generateBtn = document.querySelector("#generate");
 
 function generatePassword() {
-  // print this so you know when this function is called
-  // DELETE BEFORE PUBLISHING
-  // console.log('generatePassword is running');
-
   // object containing default criteria for password,
   // functions for each character type to get random of type
   let elements = {
@@ -186,7 +182,7 @@ function generatePassword() {
     if (selectorsAll[index] === 'symbols') {
       // if character type hasn't been picked yet
       if (selectors.includes('symbols')) {
-        // get random character type
+        // get random character of type
         elements.password += elements.rsym();
         // remove symbol from pool
         selectors.splice(selectors.indexOf('symbols'), 1);
